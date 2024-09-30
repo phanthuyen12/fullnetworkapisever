@@ -1,0 +1,7 @@
+Organizations:
+  - Name: thuyendeptrai
+    ID: thuyendeptraiMSP
+    MSPDir: crypto-config/peerOrganizations/thuyendeptrai.example.com/msp
+    AnchorPeers:
+      - Host: peer0.thuyendeptrai.example.com
+        Port: 60456

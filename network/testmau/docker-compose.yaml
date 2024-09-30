@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  orderer.example.com:
+    image: hyperledger/fabric-orderer:2.4
+    container_name: orderer.example.com
+    ports:
+      - 7050:7050
+    volumes:
+      - ./config:/etc/hyperledger/fabric
+    environment:
+      - FABRIC_LOG_LEVEL=INFO
+      - ORDERER_GENERAL_LOGLEVEL=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/fabric/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=thuyendeptraiMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/fabric/msp
+      - ORDERER_GENERAL_TLS_ENABLED=false
+
+  peer0.thuyendeptrai.example.com:
+    image: hyperledger/fabric-peer:2.4
+    container_name: peer0.thuyendeptrai.example.com
+    ports:
+      - 60456:60456
+    volumes:
+      - ./config:/etc/hyperledger/fabric
+    environment:
+      - FABRIC_LOG_LEVEL=INFO
+      - CORE_PEER_ID=peer0.thuyendeptrai.example.com
+      - CORE_PEER_ADDRESS=peer0.thuyendeptrai.example.com:60456
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:60456
+      - CORE_PEER_LOCALMSPID=thuyendeptraiMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_PEER_TLS_ENABLED=false

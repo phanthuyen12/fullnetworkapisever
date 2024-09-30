@@ -1,0 +1,19 @@
+Profiles:
+  SampleDevModeEtcdRaft:
+    Application:
+      Organizations:
+        - *thuyendeptrai
+    Organizations:
+      - &thuyendeptrai
+        Name: thuyendeptrai
+        ID: thuyendeptraiMSP
+        MSPDir: /etc/hyperledger/fabric/msp/thuyendeptrai
+        AnchorPeers:
+          - Host: peer0.thuyendeptrai.example.com
+            Port: 60456
+    Orderer:
+      OrdererType: etcdraft
+      EtcdRaft:
+        Consenters:
+          - Host: orderer.example.com
+            Port: 7050

@@ -13,26 +13,26 @@
 #
 ################################################################################
 Organizations:
-    - &435453
+    - &ewrwerwerwerwer34e
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: 435453MSP
+        Name: ewrwerwerwerwer34eMSP
 
         # ID to load the MSP definition as
-        ID: 435453MSP
+        ID: ewrwerwerwerwer34eMSP
 
-        MSPDir: ../organizations/peerOrganizations/435453.example.com/msp
+        MSPDir: ../organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/msp
 
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('435453MSP.admin', '435453MSP.peer', '435453MSP.client')"
+                Rule: "OR('ewrwerwerwerwer34eMSP.admin', 'ewrwerwerwerwer34eMSP.peer', 'ewrwerwerwerwer34eMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('435453MSP.admin', '435453MSP.client')"
+                Rule: "OR('ewrwerwerwerwer34eMSP.admin', 'ewrwerwerwerwer34eMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('435453MSP.admin')"
+                Rule: "OR('ewrwerwerwerwer34eMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('435453MSP.peer')"
+                Rule: "OR('ewrwerwerwerwer34eMSP.peer')"

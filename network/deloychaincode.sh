@@ -1,8 +1,5 @@
 #!/bin/bash
 
-deloychaincode(){
-    ORG_VALUE=$1
-    PORT_VALUE=$2
 peer lifecycle chaincode package organization.tar.gz --path ../chaincode/OrgChaincode --lang node --label organization_1
 export PATH=${PWD}/../bin:$PATH
 export FABRIC_CFG_PATH=${PWD}/../config/
@@ -71,10 +68,3 @@ peer lifecycle chaincode checkcommitreadiness \
   --version 1.0.1 \
   --sequence 1 \
   --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
-
-
-
-
-
-
-}

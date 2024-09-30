@@ -276,7 +276,7 @@ exports.createOrg = async (req, res) => {
       console.log("Transaction result:", result.toString());
 
       // Trả về thành công với true
-      res.status(200).json({ success: true, message: "Organization has been added" });
+      res.status(200).json({ success: true, message: result.toString() });
     } else {
       console.error("Result is undefined");
 

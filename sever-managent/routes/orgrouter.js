@@ -36,6 +36,7 @@ router.post('/getfull-record', meidacaController.getfullRecords);
 router.post('/register-record', meidacaController.registerMedical);
 router.post('/login-record', meidacaController.loginmedical);
 router.post('/update-record', meidacaController.updateRecords);
+router.post('/approve-access-request', meidacaController.approveAccessRequest);
 
 router.get('/interface-options',interfaceController.index);
 router.get('/list-options',interfaceController.index);

@@ -1,0 +1,150 @@
+    {
+        cccd: '3924982758347',
+        tokenmedical: 'P0sdfsljdfjk01',
+        name: 'Nguyen Van A',
+        birthDate: '1980-01-01',
+        gender: 'Nam',
+        email: 'phangiathuyendev@gmail.com',
+        address: '123 Main St, Hanoi',
+        phoneNumber: '0901234567',
+        identityCard: '123456789',
+        passwordmedical: '',
+        approvedOrgs: {}, // Chưa có tổ chức nào được phê duyệt quyền truy cập
+        medicalRecords: [
+            {
+                recordId: 'MR001', // Mã hồ sơ bệnh
+                date: '2024-09-30',
+                hospital: {
+                    name: 'Bệnh viện Bạch Mai', // Bệnh viện nơi khám
+                    address: '78 Đường Giải Phóng, Hà Nội',
+                    department: 'Tim mạch' // Khoa khám bệnh
+                },
+                doctor: {
+                    name: 'Bác sĩ B', // Bác sĩ khám
+                    specialization: 'Tim mạch'
+                },
+                testsAndProcedures: {
+                    bloodTest: {
+                        testDetails: [
+                            {
+                                testName: 'Công thức máu',
+                                description: 'Kiểm tra số lượng hồng cầu, bạch cầu, tiểu cầu',
+                                results: {
+                                    RBC: {
+                                        value: 4.8,
+                                        unit: 'T/L',
+                                        normalRange: {
+                                            min: 4.5,
+                                            max: 6.0
+                                        }
+                                    },
+                                    WBC: {
+                                        value: 7.2,
+                                        unit: 'G/L',
+                                        normalRange: {
+                                            min: 4.0,
+                                            max: 10.0
+                                        }
+                                    },
+                                    Platelets: {
+                                        value: 250,
+                                        unit: 'G/L',
+                                        normalRange: {
+                                            min: 150,
+                                            max: 450
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                testName: 'Sinh hóa máu',
+                                description: 'Kiểm tra các chất hóa học trong máu',
+                                results: {
+                                    Glucose: {
+                                        value: 5.2,
+                                        unit: 'mmol/L',
+                                        normalRange: {
+                                            min: 3.9,
+                                            max: 6.1
+                                        }
+                                    },
+                                    Cholesterol: {
+                                        value: 4.5,
+                                        unit: 'mmol/L',
+                                        normalRange: {
+                                            min: 3.0,
+                                            max: 5.2
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    urineTest: {
+                        testDetails: [
+                            {
+                                testName: 'Xét nghiệm tổng quát nước tiểu',
+                                description: 'Đánh giá các chỉ số nước tiểu',
+                                results: {
+                                    Color: {
+                                        value: 'Vàng nhạt',
+                                        normal: 'Vàng nhạt'
+                                    },
+                                    pH: {
+                                        value: 6.0,
+                                        unit: '',
+                                        normalRange: {
+                                            min: 4.5,
+                                            max: 8.0
+                                        }
+                                    },
+                                    Protein: {
+                                        value: 'Âm tính',
+                                        normal: 'Âm tính'
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                diagnosis: {
+                    symptoms: 'Đau đầu, hoa mắt',
+                    finalDiagnosis: 'Tăng huyết áp',
+                    treatmentPlan: 'Sử dụng thuốc B, tái khám sau 1 tháng',
+                    notes: 'Bệnh nhân cần tuân thủ theo dõi huyết áp hàng ngày'
+                },
+                prescription: {
+                    prescribedBy: 'Bác sĩ B', // Bác sĩ kê đơn
+                    date: '2024-09-30',
+                    medications: [
+                        {
+                            medicineName: 'Thuốc B',
+                            dosage: '1 viên/lần',
+                            frequency: '2 lần/ngày',
+                            duration: '1 tháng',
+                            instructions: 'Uống sau ăn'
+                        },
+                        {
+                            medicineName: 'Thuốc C',
+                            dosage: '2 viên/lần',
+                            frequency: '1 lần/ngày',
+                            duration: '1 tuần',
+                            instructions: 'Uống trước khi ngủ'
+                        }
+                    ],
+                    notes: 'Bệnh nhân cần uống đủ liều, không tự ý thay đổi liều lượng thuốc.' // Ghi chú thêm vào kê đơn
+                }
+            }
+        ], // Hồ sơ khám bệnh bao gồm chẩn đoán và kê đơn thuốc
+        accessRequests: {}, // Các yêu cầu truy cập từ các tổ chức
+        medicalHistory: [
+            { disease: 'Tăng huyết áp', treatment: 'Thuốc A'
+            }
+        ],
+        currentStatus: {
+            symptoms: 'Đau đầu',
+            diagnosis: 'Tăng huyết áp',
+            treatmentPlan: 'Thuốc B'
+        },
+        authorizedEntities: [], // Các thực thể được phép truy cập bản ghi
+    }

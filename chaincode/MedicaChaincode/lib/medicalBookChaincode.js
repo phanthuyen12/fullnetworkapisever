@@ -24,7 +24,7 @@ class MedicalBookContract extends Contract {
                 approvedOrgs: {}, // Chưa có tổ chức nào được phê duyệt quyền truy cập
                 medicalRecords: [], // Chưa có hồ sơ khám bệnh
                 accessRequests: {}, // Các yêu cầu truy cập từ các tổ chức
-                medicalHistory: [
+                có : [
                     { disease: 'Tăng huyết áp', treatment: 'Thuốc A' }
                 ],
                 currentStatus: {
@@ -280,6 +280,8 @@ class MedicalBookContract extends Contract {
         // Cập nhật bản ghi trên sổ cái
         await ctx.stub.putState(cccd, Buffer.from(JSON.stringify(record)));
         console.info(`Tổ chức ${tokeorg} đã gửi yêu cầu quyền truy cập cho bản ghi với ID: ${cccd}`);
+        return `Yêu cầu quyền truy cập từ tổ chức ${tokeorg} đã được thêm vào bản ghi với ID: ${cccd}`;
+
     }
 
 
@@ -375,7 +377,110 @@ class MedicalBookContract extends Contract {
     }
 
 
-
+    async approveAccessRequest(ctx, cccd, tokeorg, approve, viewType) {
+        // Lấy bản ghi từ sổ cái
+        const recordAsBytes = await ctx.stub.getState(cccd);
+        const clientMSPID = ctx.clientIdentity.getMSPID();
+    
+        if (!recordAsBytes || recordAsBytes.length === 0) {
+            throw new Error(`Bản ghi với ID ${cccd} không tồn tại`);
+        }
+    
+        const record = JSON.parse(recordAsBytes.toString());
+    
+        // Tìm yêu cầu truy cập từ tổ chức
+        const requestIndex = record.accessRequests.findIndex(req => req.organization === tokeorg);
+    
+        if (requestIndex === -1) {
+            throw new Error(`Không tìm thấy yêu cầu truy cập từ tổ chức ${tokeorg} ------------- ${record.accessRequests}`);
+        }
+    
+        // Cập nhật trạng thái phê duyệt
+        if (approve) {
+            record.accessRequests[requestIndex].approved = true;
+    
+            // Nếu được phê duyệt, thêm vào danh sách tổ chức được phê duyệt
+            if (!record.approvedOrgs[tokeorg]) {
+                record.approvedOrgs[tokeorg] = {
+                    viewAll: viewType === 'all', // xem tất cả thông tin
+                    viewLimited: viewType === 'limited' // chỉ xem thông tin cụ thể
+                };
+            }
+    
+            // Cập nhật lịch sử y tế
+            record.medicalHistory.push({
+                action: `Approved access request from ${tokeorg}`,
+                timestamp: new Date().toISOString(),
+                content: `Access granted to ${tokeorg} with view type: ${viewType}`,
+                data: { tokeorg, clientMSPID }
+            });
+            
+            console.info(`Tổ chức ${tokeorg} đã được phê duyệt quyền truy cập cho bản ghi với ID: ${cccd}`);
+        } else {
+            record.accessRequests[requestIndex].approved = false;
+            console.info(`Tổ chức ${tokeorg} đã bị từ chối quyền truy cập cho bản ghi với ID: ${cccd}`);
+        }
+    
+        // Cập nhật bản ghi trên sổ cái
+        await ctx.stub.putState(cccd, Buffer.from(JSON.stringify(record)));
+        return `Yêu cầu quyền truy cập từ tổ chức ${tokeorg} đã được ${approve ? 'phê duyệt' : 'từ chối'}.`;
+    }
+    async getMedicalRecord(ctx, cccd, tokeorg) {
+        // Lấy bản ghi từ sổ cái
+        const recordAsBytes = await ctx.stub.getState(cccd);
+    
+        if (!recordAsBytes || recordAsBytes.length === 0) {
+            throw new Error(`Bản ghi với ID ${cccd} không tồn tại`);
+        }
+    
+        const record = JSON.parse(recordAsBytes.toString());
+        const clientMSPID = ctx.clientIdentity.getMSPID();
+    
+        // Kiểm tra xem tổ chức có được phê duyệt quyền truy cập không
+        if (!record.approvedOrgs[tokeorg]) {
+            throw new Error(`Tổ chức ${tokeorg} chưa được phê duyệt quyền truy cập`);
+        }
+    
+        // Xác định loại quyền truy cập
+        const accessType = record.approvedOrgs[tokeorg];
+    
+        let result;
+    
+        // Nếu tổ chức được phê duyệt quyền xem tất cả thông tin
+        if (accessType.viewAll) {
+            result = {
+                cccd: record.cccd,
+                tokenmedical: record.tokenmedical,
+                name: record.name,
+                birthDate: record.birthDate,
+                gender: record.gender,
+                email: record.email,
+                address: record.address,
+                phoneNumber: record.phoneNumber,
+                identityCard: record.identityCard,
+                medicalRecords: record.medicalRecords,
+                currentStatus: record.currentStatus,
+                medicalHistory: record.medicalHistory,
+                accessRequests: record.accessRequests
+            };
+        } 
+        // Nếu tổ chức chỉ được phê duyệt quyền xem thông tin hạn chế
+        else if (accessType.viewLimited) {
+            result = {
+                cccd: record.cccd,
+                tokenmedical: record.tokenmedical,
+                name: record.name,
+                birthDate: record.birthDate,
+                gender: record.gender,
+                email: record.email
+            };
+        } else {
+            throw new Error(`Tổ chức ${tokeorg} không có quyền truy cập vào thông tin này`);
+        }
+    
+        return result;
+    }
+    
 
     generateToken(data) {
         const hash = crypto.createHash('sha256');

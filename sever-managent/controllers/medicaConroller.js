@@ -259,17 +259,17 @@ exports.approveAccess = async (req, res) => {
 }
 exports.addrequestreacord = async (req,res)=>{
   try{
-    const { value,cccd, tokeorg,content,brach} =  req.body;
+    const { value,cccd, tokeorg,content ,branch} =  req.body;
 
     const { contract, gateway } = await connectToNetworkorgvalue(value);
     console.log(req.body);
     const currentTime = new Date();
 
-    if(!brach || !cccd || !content){
+    if(!branch || !cccd || !content){
       return res.status(400).json({ error: 'Missing required fields' });
     }
     try{
-   const result =  await contract.submitTransaction('addRecordStatusBranch',tokeorg, cccd, brach,content,currentTime);
+   const result =  await contract.submitTransaction('addRecordStatusBranch',tokeorg, cccd, branch,content,currentTime);
     if (result) {
       console.log("Transaction result:", result.toString());
       res.status(200).send("Organization has been added");
@@ -294,19 +294,19 @@ exports.addrequestreacord = async (req,res)=>{
 
 exports.requestbookaccess = async (req, res) => {
   try {
-    const { value, cccd, tokeorg, content, brach } = req.body;
-
+    const { value, cccd, tokeorg, content, branch } = req.body;
+    console.log(req.body);
     const { contract, gateway } = await connectToNetworkmedicalvalue(value);
     const currentTime = new Date();
 
-    if (!brach || !cccd || !content) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    if (!branch || !cccd || !content) {
+      return res.status(400).json({ error: 'Missing required fields 400' });
     }
 
     // Gửi giao dịch requestAccess
     try {
-      const result = await contract.submitTransaction('requestAccess', cccd, brach, content, currentTime);
-      await gateway.disconnect();
+      const result = await contract.submitTransaction('requestAccess', cccd, branch, content, currentTime);
+      // await gateway.disconnect();
 
       if (result) {
         console.log("Transaction result:", result.toString());
@@ -359,6 +359,31 @@ exports.getDataRecord = async (req, res) => {
     }             
 
 }
+exports.approveAccessRequest = async (req, res) => {
+  const { cccd, tokeorg, approve, viewType,value } = req.body;
+
+  // Kiểm tra các tham số
+  if (!cccd || !tokeorg || (approve !== true && approve !== false) || !viewType) {
+      return res.status(400).send('Thiếu thông tin yêu cầu hoặc thông tin không hợp lệ.');
+  }
+
+  try {
+      // Tạo wallet và gateway
+      const { contract, gateway } = await connectToNetworkmedicalvalue(value);
+
+      // Gọi hàm approveAccessRequest trong chaincode
+      const result = await contract.submitTransaction('approveAccessRequest', cccd, tokeorg, approve, viewType);
+      console.log(result)
+      // Đóng gateway
+      await gateway.disconnect();
+
+      return res.status(200).send(result.toString());
+  } catch (error) {
+    
+      console.error(`Lỗi khi phê duyệt yêu cầu: ${error}`);
+      return res.status(500).send(`Lỗi khi phê duyệt yêu cầu: ${error.message}`);
+  }
+};
 
 exports.createrecord = async (req, res) => { 
     const {name, birthDate, gender, address, phoneNumber, identityCard,cccd,passwordmedical} = req.body;

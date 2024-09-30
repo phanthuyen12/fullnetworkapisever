@@ -1,0 +1,159 @@
+Script path: /root/codeduantotnghiep/sever/network/tudong.sh
+addOrgnew.sh
+ccp-generate.sh
+ccp-template.json
+ccp-template.yaml
+compose
+configtx.yaml
+fabric-ca
+generate-files.sh
+lichsu.txt
+logfile.txt
+org-crypto.yaml
+template
+valueport.txt
+Docker compose files created for 
+[0;34mUsing docker and docker-compose[0m
+Port value CA: compose/compose-org-ca.yaml
+Current mode: up
+Organization value: ewrwerwerwerwer34e
+Port value CA: 11609
+Generating certificates and organization definition...
+Organization value: ewrwerwerwerwer34e
+Port value CA: 11609
+[0;34mGenerating certificates using Fabric CA[0m
+Some networks were defined but are not used by any service: test
+Found orphan containers (peer0.org2.example.com, ca_orderer, ca_org2, ca_org1, orderer.example.com, peer0.org1.example.com) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+Creating ca_ewrwerwerwerwer34e ... 
+[1A[2KCreating ca_ewrwerwerwerwer34e ... [32mdone[0m[1B[0;34mCreating ewrwerwerwerwer34e Identities[0m
+Organization: ewrwerwerwerwer34e
+CA Port: 11609
+Enrolling the CA admin
++ fabric-ca-client enroll -u https://admin:adminpw@localhost:11609 --caname ca-ewrwerwerwerwer34e --tls.certfiles /root/codeduantotnghiep/sever/network/addOrgnew/fabric-ca/ewrwerwerwerwer34e/tls-cert.pem
+2024/10/01 02:32:29 [INFO] Created a default configuration file at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/fabric-ca-client-config.yaml
+2024/10/01 02:32:29 [INFO] TLS Enabled
+2024/10/01 02:32:29 [INFO] generating key: &{A:ecdsa S:256}
+2024/10/01 02:32:29 [INFO] encoded CSR
+2024/10/01 02:32:29 [INFO] Stored client certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/msp/signcerts/cert.pem
+2024/10/01 02:32:29 [INFO] Stored root CA certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/msp/cacerts/localhost-11609-ca-ewrwerwerwerwer34e.pem
+2024/10/01 02:32:29 [INFO] Stored Issuer public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/msp/IssuerPublicKey
+2024/10/01 02:32:29 [INFO] Stored Issuer revocation public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/msp/IssuerRevocationPublicKey
+Registering peer0
++ fabric-ca-client register --caname ca-ewrwerwerwerwer34e --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles /root/codeduantotnghiep/sever/network/addOrgnew/fabric-ca/ewrwerwerwerwer34e/tls-cert.pem
+2024/10/01 02:32:29 [INFO] Configuration file location: /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/fabric-ca-client-config.yaml
+2024/10/01 02:32:29 [INFO] TLS Enabled
+2024/10/01 02:32:29 [INFO] TLS Enabled
+Password: peer0pw
+Registering user
++ fabric-ca-client register --caname ca-ewrwerwerwerwer34e --id.name user1 --id.secret user1pw --id.type client --tls.certfiles /root/codeduantotnghiep/sever/network/addOrgnew/fabric-ca/ewrwerwerwerwer34e/tls-cert.pem
+2024/10/01 02:32:29 [INFO] Configuration file location: /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/fabric-ca-client-config.yaml
+2024/10/01 02:32:29 [INFO] TLS Enabled
+2024/10/01 02:32:29 [INFO] TLS Enabled
+Password: user1pw
+Registering the org admin
++ fabric-ca-client register --caname ca-ewrwerwerwerwer34e --id.name ewrwerwerwerwer34eadmin --id.secret ewrwerwerwerwer34eadminpw --id.type admin --tls.certfiles /root/codeduantotnghiep/sever/network/addOrgnew/fabric-ca/ewrwerwerwerwer34e/tls-cert.pem
+2024/10/01 02:32:29 [INFO] Configuration file location: /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/fabric-ca-client-config.yaml
+2024/10/01 02:32:29 [INFO] TLS Enabled
+2024/10/01 02:32:29 [INFO] TLS Enabled
+Password: ewrwerwerwerwer34eadminpw
+Generating the peer0 msp
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:11609 --caname ca-ewrwerwerwerwer34e -M /root/codeduantotnghiep/sever/network/addOrgnew/../organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/msp --tls.certfiles /root/codeduantotnghiep/sever/network/addOrgnew/fabric-ca/ewrwerwerwerwer34e/tls-cert.pem
+2024/10/01 02:32:30 [INFO] TLS Enabled
+2024/10/01 02:32:30 [INFO] generating key: &{A:ecdsa S:256}
+2024/10/01 02:32:30 [INFO] encoded CSR
+2024/10/01 02:32:30 [INFO] Stored client certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/msp/signcerts/cert.pem
+2024/10/01 02:32:30 [INFO] Stored root CA certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/msp/cacerts/localhost-11609-ca-ewrwerwerwerwer34e.pem
+2024/10/01 02:32:30 [INFO] Stored Issuer public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/msp/IssuerPublicKey
+2024/10/01 02:32:30 [INFO] Stored Issuer revocation public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/msp/IssuerRevocationPublicKey
+Generating the peer0-tls certificates, use --csr.hosts to specify Subject Alternative Names
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:11609 --caname ca-ewrwerwerwerwer34e -M /root/codeduantotnghiep/sever/network/addOrgnew/../organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/tls --enrollment.profile tls --csr.hosts peer0.ewrwerwerwerwer34e.example.com --csr.hosts localhost --tls.certfiles /root/codeduantotnghiep/sever/network/addOrgnew/fabric-ca/ewrwerwerwerwer34e/tls-cert.pem
+2024/10/01 02:32:30 [INFO] TLS Enabled
+2024/10/01 02:32:30 [INFO] generating key: &{A:ecdsa S:256}
+2024/10/01 02:32:30 [INFO] encoded CSR
+2024/10/01 02:32:30 [INFO] Stored client certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/tls/signcerts/cert.pem
+2024/10/01 02:32:30 [INFO] Stored TLS root CA certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/tls/tlscacerts/tls-localhost-11609-ca-ewrwerwerwerwer34e.pem
+2024/10/01 02:32:30 [INFO] Stored Issuer public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/tls/IssuerPublicKey
+2024/10/01 02:32:30 [INFO] Stored Issuer revocation public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/peers/peer0.ewrwerwerwerwer34e.example.com/tls/IssuerRevocationPublicKey
+Generating the user msp
++ fabric-ca-client enroll -u https://user1:user1pw@localhost:11609 --caname ca-ewrwerwerwerwer34e -M /root/codeduantotnghiep/sever/network/addOrgnew/../organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/User1@ewrwerwerwerwer34e.example.com/msp --tls.certfiles /root/codeduantotnghiep/sever/network/addOrgnew/fabric-ca/ewrwerwerwerwer34e/tls-cert.pem
+2024/10/01 02:32:30 [INFO] TLS Enabled
+2024/10/01 02:32:30 [INFO] generating key: &{A:ecdsa S:256}
+2024/10/01 02:32:30 [INFO] encoded CSR
+2024/10/01 02:32:31 [INFO] Stored client certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/User1@ewrwerwerwerwer34e.example.com/msp/signcerts/cert.pem
+2024/10/01 02:32:31 [INFO] Stored root CA certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/User1@ewrwerwerwerwer34e.example.com/msp/cacerts/localhost-11609-ca-ewrwerwerwerwer34e.pem
+2024/10/01 02:32:31 [INFO] Stored Issuer public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/User1@ewrwerwerwerwer34e.example.com/msp/IssuerPublicKey
+2024/10/01 02:32:31 [INFO] Stored Issuer revocation public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/User1@ewrwerwerwerwer34e.example.com/msp/IssuerRevocationPublicKey
+Generating the org admin msp
++ fabric-ca-client enroll -u https://ewrwerwerwerwer34eadmin:ewrwerwerwerwer34eadminpw@localhost:11609 --caname ca-ewrwerwerwerwer34e -M /root/codeduantotnghiep/sever/network/addOrgnew/../organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/Admin@ewrwerwerwerwer34e.example.com/msp --tls.certfiles /root/codeduantotnghiep/sever/network/addOrgnew/fabric-ca/ewrwerwerwerwer34e/tls-cert.pem
+2024/10/01 02:32:31 [INFO] TLS Enabled
+2024/10/01 02:32:31 [INFO] generating key: &{A:ecdsa S:256}
+2024/10/01 02:32:31 [INFO] encoded CSR
+2024/10/01 02:32:31 [INFO] Stored client certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/Admin@ewrwerwerwerwer34e.example.com/msp/signcerts/cert.pem
+2024/10/01 02:32:31 [INFO] Stored root CA certificate at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/Admin@ewrwerwerwerwer34e.example.com/msp/cacerts/localhost-11609-ca-ewrwerwerwerwer34e.pem
+2024/10/01 02:32:31 [INFO] Stored Issuer public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/Admin@ewrwerwerwerwer34e.example.com/msp/IssuerPublicKey
+2024/10/01 02:32:31 [INFO] Stored Issuer revocation public key at /root/codeduantotnghiep/sever/network/organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/users/Admin@ewrwerwerwerwer34e.example.com/msp/IssuerRevocationPublicKey
+/root/codeduantotnghiep/sever/network/addOrgnew/../../bin/configtxgen
+[0;34mGenerating ewrwerwerwerwer34e organization definition[0m
++ configtxgen -printOrg ewrwerwerwerwer34eMSP
+[34m2024-10-01 02:32:31.820 +07 0001 INFO[0m [common.tools.configtxgen] [34;1mmain[0m -> Loading configuration
+[34m2024-10-01 02:32:31.833 +07 0002 INFO[0m [common.tools.configtxgen.localconfig] [34;1mLoadTopLevel[0m -> Loaded configuration: /root/codeduantotnghiep/sever/network/addOrgnew/configtx.yaml
++ res=0
+[0;34mGenerating and submitting config tx to add ewrwerwerwerwer34e[0m
+The PORT_CHAINCODE variable is not set. Defaulting to a blank string.
+Creating volume "compose_peer0.ewrwerwerwerwer34e.example.com" with default driver
+Found orphan containers (peer0.org1.example.com, ca_ewrwerwerwerwer34e, ca_orderer, orderer.example.com, ca_org2, ca_org1, peer0.org2.example.com) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+Creating peer0.ewrwerwerwerwer34e.example.com ... 
+[1A[2KCreating peer0.ewrwerwerwerwer34e.example.com ... [32mdone[0m[1BCONTAINER ID   IMAGE                                                                                                                                                                             COMMAND                  CREATED          STATUS                  PORTS                                                                                                                             NAMES
+f01a889c8016   hyperledger/fabric-peer:2.5                                                                                                                                                       "peer node start"        2 seconds ago    Up Less than a second   7051/tcp, 0.0.0.0:11607->11607/tcp, :::11607->11607/tcp                                                                           peer0.ewrwerwerwerwer34e.example.com
+b47cec6ea697   hyperledger/fabric-ca:latest                                                                                                                                                      "sh -c 'fabric-ca-se…"   17 seconds ago   Up 15 seconds           7054/tcp, 0.0.0.0:11609->11609/tcp, :::11609->11609/tcp                                                                           ca_ewrwerwerwerwer34e
+d7108aff625f   dev-peer0.org1.example.com-medical_1.0.1-b88b7a494c1fa1b1708bbab1239d7c70434a4fd4ab36b527a5b240afc6a70547-45236e5b2b6f427695cefd22659ae86c1d9110642f318f30fb7aedd695721196        "docker-entrypoint.s…"   15 minutes ago   Up 15 minutes                                                                                                                                             dev-peer0.org1.example.com-medical_1.0.1-b88b7a494c1fa1b1708bbab1239d7c70434a4fd4ab36b527a5b240afc6a70547
+1ca75fa9a185   dev-peer0.org2.example.com-medical_1.0.1-b88b7a494c1fa1b1708bbab1239d7c70434a4fd4ab36b527a5b240afc6a70547-7c9c3c7cb3330a354cd8ed29d1e522ebd8c362fd3a4f00d8feb8734f75c4f62f        "docker-entrypoint.s…"   15 minutes ago   Up 15 minutes                                                                                                                                             dev-peer0.org2.example.com-medical_1.0.1-b88b7a494c1fa1b1708bbab1239d7c70434a4fd4ab36b527a5b240afc6a70547
+5e3dd699d609   dev-peer0.org2.example.com-organization_1.0.1-abc5c6a6cd84e8f4d2b410dc3ad7f4bbc2227ba1b3883512187d51654d3cbf47-8898f415f9528bbb85dd0b1b607d114e42a8ce7b4bf9aadbc6d09036a6f0b616   "docker-entrypoint.s…"   16 minutes ago   Up 16 minutes                                                                                                                                             dev-peer0.org2.example.com-organization_1.0.1-abc5c6a6cd84e8f4d2b410dc3ad7f4bbc2227ba1b3883512187d51654d3cbf47
+5cd0740852d1   dev-peer0.org1.example.com-organization_1.0.1-abc5c6a6cd84e8f4d2b410dc3ad7f4bbc2227ba1b3883512187d51654d3cbf47-196fe679946b9a9ff4a3bd287bffbd0b54e05d83650ca6d72ab56fc192fb0fd2   "docker-entrypoint.s…"   16 minutes ago   Up 16 minutes                                                                                                                                             dev-peer0.org1.example.com-organization_1.0.1-abc5c6a6cd84e8f4d2b410dc3ad7f4bbc2227ba1b3883512187d51654d3cbf47
+57e8882ce97b   hyperledger/fabric-orderer:latest                                                                                                                                                 "orderer"                18 minutes ago   Up 18 minutes           0.0.0.0:7050->7050/tcp, :::7050->7050/tcp, 0.0.0.0:7053->7053/tcp, :::7053->7053/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp   orderer.example.com
+0e671321c58c   hyperledger/fabric-peer:latest                                                                                                                                                    "peer node start"        18 minutes ago   Up 18 minutes           0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp                                              peer0.org1.example.com
+daa13d15e43a   hyperledger/fabric-peer:latest                                                                                                                                                    "peer node start"        18 minutes ago   Up 18 minutes           0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp                                    peer0.org2.example.com
+69a0b03f152d   hyperledger/fabric-ca:latest                                                                                                                                                      "sh -c 'fabric-ca-se…"   18 minutes ago   Up 18 minutes           0.0.0.0:9054->9054/tcp, :::9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, :::19054->19054/tcp                                ca_orderer
+347d15be91b4   hyperledger/fabric-ca:latest                                                                                                                                                      "sh -c 'fabric-ca-se…"   18 minutes ago   Up 18 minutes           0.0.0.0:7054->7054/tcp, :::7054->7054/tcp, 0.0.0.0:17054->17054/tcp, :::17054->17054/tcp                                          ca_org1
+e36f940e8a26   hyperledger/fabric-ca:latest                                                                                                                                                      "sh -c 'fabric-ca-se…"   18 minutes ago   Up 18 minutes           0.0.0.0:8054->8054/tcp, :::8054->8054/tcp, 7054/tcp, 0.0.0.0:18054->18054/tcp, :::18054->18054/tcp                                ca_org2
+Organization: ewrwerwerwerwer34e
+Peer Port: 11607
+CA Port: 11609
+Configuration files created successfully.
+Fetching the config block for channel 'channel1'...
+[34m2024-10-01 02:32:34.476 +07 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2024-10-01 02:32:34.494 +07 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 12
+[34m2024-10-01 02:32:34.495 +07 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 2
+[34m2024-10-01 02:32:34.500 +07 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+Changing directory to /root/codeduantotnghiep/sever/network/channel-artifacts...
+Decoding the config block...
+Modifying the config with organization 'ewrwerwerwerwer34e'...
+Encoding the original and modified configs...
+Computing the update between original and modified config...
+Decoding the computed update...
+Creating the update envelope...
+Encoding the update envelope into protobuf format...
+Changing directory back to /root/codeduantotnghiep/sever/network/network...
+[34m2024-10-01 02:32:35.402 +07 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+Signing the config update...
+[34m2024-10-01 02:32:35.615 +07 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+Created /root/codeduantotnghiep/sever/network/addOrgnew/lichsu.txt and saved 'ewrwerwerwerwer34e:11607'
+[34m2024-10-01 02:32:35.731 +07 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2024-10-01 02:32:35.778 +07 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2024-10-01 02:32:35.966 +07 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2024-10-01 02:32:35.976 +07 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2024-10-01 02:32:36.132 +07 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2024-10-01 02:32:36.209 +07 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2024-10-01 02:32:54.948 +07 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nNmedical_1.0.1:b88b7a494c1fa1b1708bbab1239d7c70434a4fd4ab36b527a5b240afc6a70547\022\rmedical_1.0.1" > 
+[34m2024-10-01 02:32:54.951 +07 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: medical_1.0.1:b88b7a494c1fa1b1708bbab1239d7c70434a4fd4ab36b527a5b240afc6a70547
+[34m2024-10-01 02:33:08.891 +07 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nSorganization_1.0.1:abc5c6a6cd84e8f4d2b410dc3ad7f4bbc2227ba1b3883512187d51654d3cbf47\022\022organization_1.0.1" > 
+[34m2024-10-01 02:33:08.891 +07 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: organization_1.0.1:abc5c6a6cd84e8f4d2b410dc3ad7f4bbc2227ba1b3883512187d51654d3cbf47
+Installed chaincodes on peer:
+Package ID: medical_1.0.1:b88b7a494c1fa1b1708bbab1239d7c70434a4fd4ab36b527a5b240afc6a70547, Label: medical_1.0.1
+Package ID: organization_1.0.1:abc5c6a6cd84e8f4d2b410dc3ad7f4bbc2227ba1b3883512187d51654d3cbf47, Label: organization_1.0.1
+[34m2024-10-01 02:33:11.549 +07 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [fe4fc85010f3e8af058f0b5e33b3feca88a2aa798880f59dfe0c52b5a28ea70a] committed with status (VALID) at localhost:11607
+[34m2024-10-01 02:33:13.817 +07 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [cc2ef5d332d89b195950f6e7b508c96a392aa9466bc2a6413ca2d2eb269e703a] committed with status (VALID) at localhost:11607
+Committed chaincode definition for chaincode 'medical' on channel 'channel1':
+Version: 1.0.1, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true, ewrwerwerwerwer34eMSP: true]
+Committed chaincode definition for chaincode 'organization' on channel 'channel1':
+Version: 1.0.1, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true, ewrwerwerwerwer34eMSP: true]

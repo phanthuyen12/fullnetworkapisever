@@ -78,7 +78,7 @@ echo "Fetching the config block for channel 'channel1'..."
 peer channel fetch config channel-artifacts/config_block.pb -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com -c channel1 --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
 
 echo "Changing directory to ${SCRIPT_DIR}/channel-artifacts..."
-cd ${SCRIPT_DIR}//channel-artifacts
+cd ${SCRIPT_DIR}/channel-artifacts
 
 echo "Decoding the config block..."
 configtxlator proto_decode --input config_block.pb --type common.Block --output config_block.json
@@ -120,7 +120,7 @@ export CORE_PEER_ADDRESS=localhost:9051
 peer channel signconfigtx -f channel-artifacts/${ORG_VALUE}_update_in_envelope.pb
 # peer channel update -f channel-artifacts/${ORG_VALUE}_update_in_envelope.pb -c channel1 -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
 
-HISTORY_FILE="/home/phangiathuyen/codeduantotnghiep/duantotnghiep/sever/network/addOrgnew/lichsu.txt"
+HISTORY_FILE="${SCRIPT_DIR}/addOrgnew/lichsu.txt"
 while IFS=: read -r value1 value2; do
     echo "Value 1: $value1"
     echo "Value 2: $value2"

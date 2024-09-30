@@ -28,6 +28,8 @@ exports.setupOrganizationFolders = async (req, res) => {
 
 exports.checkroleadmin = async (req, res) => {
     const value = req.body.value;
+    console.log( req.body);
+
     if (!value) {
         return res.status(400).send("Invalid input");
     }

@@ -24,9 +24,7 @@ class MedicalBookContract extends Contract {
                 approvedOrgs: {}, // Chưa có tổ chức nào được phê duyệt quyền truy cập
                 medicalRecords: [], // Chưa có hồ sơ khám bệnh
                 accessRequests: {}, // Các yêu cầu truy cập từ các tổ chức
-                có : [
-                    { disease: 'Tăng huyết áp', treatment: 'Thuốc A' }
-                ],
+                
                 currentStatus: {
                     symptoms: 'Đau đầu',
                     diagnosis: 'Tăng huyết áp',
@@ -88,7 +86,7 @@ class MedicalBookContract extends Contract {
             passwordmedical,         // Mật khẩu để bảo vệ hồ sơ y tế
             medicalHistory: [],      // Lịch sử y tế ban đầu là mảng rỗng
             currentStatus: {},       // Trạng thái hiện tại, khởi tạo rỗng
-            authorizedEntities: [],   // Các thực thể được ủy quyền ban đầu, khởi tạo rỗng
+            medicalExaminationHistory: [],   // Các thực thể được ủy quyền ban đầu, khởi tạo rỗng
             accessRequests: []        // Danh sách yêu cầu quyền truy cập ban đầu, khởi tạo rỗng
         };
         // Thêm sự kiện "TẠO_MEDICAL" vào lịch sử y tế
@@ -109,38 +107,41 @@ class MedicalBookContract extends Contract {
         // Lấy tất cả hồ sơ y tế
         const allRecords = await this.getAllMedicalRecords(ctx);
         const parsedRecords = JSON.parse(allRecords);
-
-        // Tìm hồ sơ dựa trên email
+    
+        // Tìm hồ sơ dựa trên cccd
         const existingRecord = parsedRecords.find(record =>
             record.Record.cccd === cccd
         );
-
+    
         if (!existingRecord) {
-            throw new Error('cccd không tồn tại trong hệ thống.');
+            return { success: false, message: 'CCCD không tồn tại trong hệ thống.' };
         }
-
-        // // Kiểm tra mật khẩu
-        // // const passwordMatch = await bcrypt.compare(passwordmedical, existingRecord.Record.passwordmedical);
-        // // if (!passwordMatch) {
-        // //     throw new Error('Mật khẩu không chính xác.');
-        // // }
-
-        // // Tạo JWT token
+    
+        // Kiểm tra mật khẩu (được bỏ ra ở phiên bản trước)
+        // const passwordMatch = await bcrypt.compare(passwordmedical, existingRecord.Record.passwordmedical);
+        // if (!passwordMatch) {
+        //     return { success: false, message: 'Mật khẩu không chính xác.' };
+        // }
+    
+        // Tạo JWT token (được bỏ ra ở phiên bản trước)
         // const payload = {
         //     tokenmedical: existingRecord.Record.tokenmedical,
         //     name: existingRecord.Record.name,
         //     email: existingRecord.Record.email,
         //     cccd: existingRecord.Record.cccd
         // };
-
+    
         // const secretKey = 'ee2de3938caccb365423140f03873e7b3f2032696632c594131835fe88db55f76f5580f678835c22b578de32cc7ec35d9f0a42a65dec98a839625b5611296e70'; // Thay thế với khóa bí mật của bạn
         // const token = jwt.sign(payload, secretKey, { expiresIn: '1h' }); // Token hết hạn sau 1 giờ
-
-        console.info(`Người dùng với email ${cccd} đã đăng nhập thành công.`);
-        return {
-            existingRecord
-        };  // Trả về JWT token sau khi đăng nhập thành công
+    
+        console.info(`Người dùng với CCCD ${cccd} đã đăng nhập thành công.`);
+        return { 
+            success: true, 
+            message: 'Đăng nhập thành công.', 
+            existingRecord: existingRecord.Record // Trả về thông tin hồ sơ y tế
+        };  // Trả về thông tin thành công sau khi đăng nhập thành công
     }
+    
     async registerMedical(ctx, name, email, cccd, passwordmedical, currentTime) {
         // Kiểm tra xem có email hoặc cccd đã tồn tại trong sổ cái hay không
         const iterator = await ctx.stub.getStateByRange('', ''); // Lấy toàn bộ dữ liệu
@@ -148,57 +149,89 @@ class MedicalBookContract extends Contract {
         while (!result.done) {
             const record = JSON.parse(result.value.value.toString('utf8'));
             if (record.email === email) {
-                throw new Error(`Email ${email} đã tồn tại trong hệ thống.`);
+                return { success: false, message: `Email ${email} đã tồn tại trong hệ thống.` };
             }
             if (record.cccd === cccd) {
-                throw new Error(`CCCD ${cccd} đã tồn tại trong hệ thống.`);
+                return { success: false, message: `CCCD ${cccd} đã tồn tại trong hệ thống.` };
             }
-
+    
             result = await iterator.next();
         }
         await iterator.close(); // Đảm bảo đóng iterator sau khi sử dụng
-
+    
         // Tạo token y tế dựa trên tên bệnh nhân
         const tokenmedical = this.generateToken(name);
-
+    
         // Tạo hồ sơ y tế mới với các thông tin cơ bản
         const record = {
             tokenmedical: tokenmedical,      // Token bệnh án
             name: name,              // Tên bệnh nhân
-            email: email,             // Email bệnh nhângetDataRecord
+            email: email,             // Email bệnh nhân
             passwordmedical: passwordmedical,   // Mật khẩu bệnh án
             cccd: cccd,              // Căn cước công dân
             medicalHistory: [],  // Lịch sử y tế ban đầu là mảng rỗng
             currentStatus: {},   // Trạng thái hiện tại khởi tạo rỗng
             authorizedEntities: [], // Thực thể được ủy quyền ban đầu là mảng rỗng
-            accessRequests: []     // Danh sách yêu cầu quyền truy cập khởi tạo rỗng
+            accessRequests: [],  // Danh sách yêu cầu quyền truy cập khởi tạo rỗng
+            medicalExaminationHistory: [],   // Các thực thể được ủy quyền ban đầu, khởi tạo rỗng
         };
-
+    
         // Thêm sự kiện "TẠO_MEDICAL" vào lịch sử y tế
         record.medicalHistory.push({
             action: 'TẠO_MEDICAL',      // Hành động tạo hồ sơ
             timestamp: currentTime,     // Thời gian hiện tại khi hồ sơ được tạo
             data: { name, email, passwordmedical, cccd }  // Dữ liệu bệnh nhân
         });
-
+    
         // Lưu bản ghi vào sổ cái blockchain
         await ctx.stub.putState(cccd, Buffer.from(JSON.stringify(record)));
-
+    
         console.info(`Đã tạo bản ghi với ID: ${cccd}`);
-        return cccd;  // Trả về token của bệnh án vừa được tạo
+        return { success: true, message: `Đã tạo bản ghi với ID: ${cccd}`, tokenmedical };  // Trả về token y tế và thông điệp thành công
     }
+    
 
-
-    async updateRecord(ctx, cccd,tokenmedical, birthDate, gender, address, phoneNumber, identityCard, currentTime) {
+    async PostDataMedicalExaminationHistory(ctx, cccd, tokeorg, newData, timepost) {
+        const recordAsBytes = await ctx.stub.getState(cccd);
+        
+        if (!recordAsBytes || recordAsBytes.length === 0) {
+            return { success: false, message: `Record with CCCD ${cccd} does not exist` };
+        }
+    
+        const record = JSON.parse(recordAsBytes.toString());
+        const approvedRequest = record.accessRequests.find(req => req.organization === tokeorg && req.approved === "true");
+    
+        if (!approvedRequest) {
+            return { success: false, message: `Access request from organization ${ctx.clientIdentity.getMSPID()} is not approved.` };
+        }
+       
+        Object.keys(newData).forEach(key => {
+            record[key] = newData[key]; 
+        });
+    
+        record.medicalHistory.push({
+            action: "Add medical examination data",
+            timestamp: timepost,
+            data: newData
+        });
+    
+        await ctx.stub.putState(cccd, Buffer.from(JSON.stringify(record)));
+        
+        console.info(`Record with CCCD ${cccd} has been successfully updated`);
+        return { success: true, message: `Record with CCCD ${cccd} has been successfully updated` };
+    }
+    
+    
+    async updateRecord(ctx, cccd, tokenmedical, birthDate, gender, address, phoneNumber, identityCard, currentTime) {
         // Lấy bản ghi từ sổ cái dựa trên token y tế
         const recordAsBytes = await ctx.stub.getState(cccd);
-
+    
         if (!recordAsBytes || recordAsBytes.length === 0) {
-            throw new Error(`Bản ghi với ID ${cccd} không tồn tại`);
+            return { success: false, message: `Bản ghi với ID ${cccd} không tồn tại` };
         }
-
+    
         const record = JSON.parse(recordAsBytes.toString());
-
+    
         // Cập nhật các giá trị còn lại của hồ sơ bệnh án
         record.birthDate = birthDate;
         record.gender = gender;
@@ -210,19 +243,19 @@ class MedicalBookContract extends Contract {
             timestamp: currentTime,     // Thời gian hiện tại khi hồ sơ được tạo
             data: { tokenmedical, birthDate, gender, address, phoneNumber, identityCard }  // Dữ liệu bệnh nhân
         });
-
+    
         // Cập nhật bản ghi trên sổ cái
         await ctx.stub.putState(tokenmedical, Buffer.from(JSON.stringify(record)));
-
+    
         // Lấy dữ liệu bản ghi đã cập nhật
         const updatedRecordAsBytes = await ctx.stub.getState(tokenmedical);
-
+    
         if (!updatedRecordAsBytes || updatedRecordAsBytes.length === 0) {
-            throw new Error(`Không thể lấy bản ghi đã cập nhật với ID ${tokenmedical}`);
+            return { success: false, message: `Không thể lấy bản ghi đã cập nhật với ID ${tokenmedical}` };
         }
-
+    
         const updatedRecord = JSON.parse(updatedRecordAsBytes.toString());
-
+    
         // Tạo JWT token
         const secretKey = 'ee2de3938caccb365423140f03873e7b3f2032696632c594131835fe88db55f76f5580f678835c22b578de32cc7ec35d9f0a42a65dec98a839625b5611296e70'; // Thay thế với khóa bí mật của bạn
         const payload = {
@@ -240,50 +273,61 @@ class MedicalBookContract extends Contract {
             authorizedEntities: updatedRecord.authorizedEntities,
             accessRequests: updatedRecord.accessRequests
         };
-
+    
         const token = jwt.sign(payload, secretKey, { expiresIn: '1h' }); // Token hết hạn sau 1 giờ
-
+    
         console.info(`Bản ghi với ID ${tokenmedical} đã được cập nhật và token JWT đã được tạo.`);
+        
         return {
-            token
-        };  // Trả về JWT token chứa toàn bộ thông tin bản ghi
+            success: true,
+            message: `Bản ghi với ID ${tokenmedical} đã được cập nhật thành công.`,
+            token: token // Trả về JWT token chứa toàn bộ thông tin bản ghi
+        };
     }
+    
     async requestAccess(ctx, cccd, tokeorg, content, timerequest) {
         // Lấy bản ghi từ sổ cái
         const recordAsBytes = await ctx.stub.getState(cccd);
         const clientMSPID = ctx.clientIdentity.getMSPID();
-
-
+    
         if (!recordAsBytes || recordAsBytes.length === 0) {
-            throw new Error(`Bản ghi với ID ${cccd} không tồn tại`);
+            return { success: false, message: `Bản ghi với ID ${cccd} không tồn tại` };
+
         }
-
+    
         const record = JSON.parse(recordAsBytes.toString());
-
+    
+        // Kiểm tra xem tổ chức đã gửi yêu cầu nào chưa
+        const existingRequest = record.accessRequests.find(req => req.organization === tokeorg);
+        if (existingRequest) {
+            return { success: false, message: `Tổ chức ${tokeorg} đã gửi yêu cầu quyền truy cập trước đó. Chỉ một yêu cầu được phép gửi.` };
+        }
+    
         // Thêm yêu cầu quyền truy cập vào danh sách yêu cầu với trạng thái chưa được phê duyệt
         record.accessRequests.push({
             organization: tokeorg,
             nameorganization: clientMSPID,
             content: content,
             approved: false,
+            viewType: "None", // Kiểu hiển thị (ví dụ: detailed, summary)
             timestamp: timerequest
         });
-
+    
         // Thêm vào lịch sử y tế
         record.medicalHistory.push({
             action: 'Receive requests from the organization',
             timestamp: timerequest,
             content: content,
+            viewType: "None", // Kiểu hiển thị (ví dụ: detailed, summary)
             data: { tokeorg, clientMSPID }
         });
-
+    
         // Cập nhật bản ghi trên sổ cái
         await ctx.stub.putState(cccd, Buffer.from(JSON.stringify(record)));
         console.info(`Tổ chức ${tokeorg} đã gửi yêu cầu quyền truy cập cho bản ghi với ID: ${cccd}`);
-        return `Yêu cầu quyền truy cập từ tổ chức ${tokeorg} đã được thêm vào bản ghi với ID: ${cccd}`;
-
+        return { success: true, message: `Yêu cầu quyền truy cập từ tổ chức ${tokeorg} đã được thêm vào bản ghi với ID: ${cccd}` };
     }
-
+    
 
 
 
@@ -363,74 +407,83 @@ class MedicalBookContract extends Contract {
     async getDataRecord(ctx, cccd) {
         // Lấy tokenmedical từ cccd
         const cccdcalAsBytes = await ctx.stub.getState(cccd);
-
+    
         if (!cccdcalAsBytes || cccdcalAsBytes.length === 0) {
-            throw new Error(`Không tìm thấy bản ghi với CCCD ${cccd}`);
+            return { 
+                success: false, 
+                message: `Không tìm thấy bản ghi với CCCD ${cccd}` 
+            };
         }
-
-
+    
         // Lấy bản ghi thực tế từ tokenmedical
-
-
         const record = JSON.parse(cccdcalAsBytes.toString());
-        return record;
+    
+        return { 
+            success: true, 
+            message: 'Bản ghi đã được lấy thành công.', 
+            record: record 
+        };
     }
+    
 
-
-    async approveAccessRequest(ctx, cccd, tokeorg, approve, viewType) {
+    async approveAccessRequest(ctx, cccd, tokeorg, approve, viewType, timecreate) {
         // Lấy bản ghi từ sổ cái
         const recordAsBytes = await ctx.stub.getState(cccd);
         const clientMSPID = ctx.clientIdentity.getMSPID();
     
         if (!recordAsBytes || recordAsBytes.length === 0) {
-            throw new Error(`Bản ghi với ID ${cccd} không tồn tại`);
+            return { 
+                success: false, 
+                message: `Bản ghi với ID ${cccd} không tồn tại` 
+            };
         }
     
         const record = JSON.parse(recordAsBytes.toString());
     
-        // Tìm yêu cầu truy cập từ tổ chức
-        const requestIndex = record.accessRequests.findIndex(req => req.organization === tokeorg);
-    
-        if (requestIndex === -1) {
-            throw new Error(`Không tìm thấy yêu cầu truy cập từ tổ chức ${tokeorg} ------------- ${record.accessRequests}`);
+        // Tìm yêu cầu truy cập từ tổ chức bằng filter
+        const requests = record.accessRequests.filter(req => req.organization === tokeorg);
+        
+        // Kiểm tra xem có yêu cầu nào không
+        if (requests.length === 0) {
+            return { 
+                success: false, 
+                message: `Không tìm thấy yêu cầu truy cập từ tổ chức ${tokeorg}` 
+            };
         }
     
-        // Cập nhật trạng thái phê duyệt
-        if (approve) {
-            record.accessRequests[requestIndex].approved = true;
+        // Cập nhật trạng thái phê duyệt và viewType cho từng yêu cầu truy cập
+        requests.forEach(req => {
+            req.approved = approve; // Cập nhật trạng thái được phê duyệt
+            req.viewType = viewType; // Cập nhật viewType
+        });
     
-            // Nếu được phê duyệt, thêm vào danh sách tổ chức được phê duyệt
-            if (!record.approvedOrgs[tokeorg]) {
-                record.approvedOrgs[tokeorg] = {
-                    viewAll: viewType === 'all', // xem tất cả thông tin
-                    viewLimited: viewType === 'limited' // chỉ xem thông tin cụ thể
-                };
-            }
-    
-            // Cập nhật lịch sử y tế
-            record.medicalHistory.push({
-                action: `Approved access request from ${tokeorg}`,
-                timestamp: new Date().toISOString(),
-                content: `Access granted to ${tokeorg} with view type: ${viewType}`,
-                data: { tokeorg, clientMSPID }
-            });
-            
-            console.info(`Tổ chức ${tokeorg} đã được phê duyệt quyền truy cập cho bản ghi với ID: ${cccd}`);
-        } else {
-            record.accessRequests[requestIndex].approved = false;
-            console.info(`Tổ chức ${tokeorg} đã bị từ chối quyền truy cập cho bản ghi với ID: ${cccd}`);
-        }
+        // Thêm vào lịch sử y tế
+        record.medicalHistory.push({
+            action: 'successfully approved the organization',
+            timestamp: timecreate,
+            data: { cccd, tokeorg, approve, viewType }
+        });
     
         // Cập nhật bản ghi trên sổ cái
         await ctx.stub.putState(cccd, Buffer.from(JSON.stringify(record)));
-        return `Yêu cầu quyền truy cập từ tổ chức ${tokeorg} đã được ${approve ? 'phê duyệt' : 'từ chối'}.`;
+    
+        return { 
+            success: true, 
+            message: 'Yêu cầu truy cập đã được phê duyệt thành công.', 
+            approvedRequests: requests // Trả về danh sách yêu cầu truy cập đã được cập nhật
+        }; 
     }
+    
+    
     async getMedicalRecord(ctx, cccd, tokeorg) {
         // Lấy bản ghi từ sổ cái
         const recordAsBytes = await ctx.stub.getState(cccd);
     
         if (!recordAsBytes || recordAsBytes.length === 0) {
-            throw new Error(`Bản ghi với ID ${cccd} không tồn tại`);
+            return { 
+                success: false, 
+                message: `Bản ghi với ID ${cccd} không tồn tại` 
+            };
         }
     
         const record = JSON.parse(recordAsBytes.toString());
@@ -438,7 +491,10 @@ class MedicalBookContract extends Contract {
     
         // Kiểm tra xem tổ chức có được phê duyệt quyền truy cập không
         if (!record.approvedOrgs[tokeorg]) {
-            throw new Error(`Tổ chức ${tokeorg} chưa được phê duyệt quyền truy cập`);
+            return { 
+                success: false, 
+                message: `Tổ chức ${tokeorg} chưa được phê duyệt quyền truy cập` 
+            };
         }
     
         // Xác định loại quyền truy cập
@@ -475,10 +531,17 @@ class MedicalBookContract extends Contract {
                 email: record.email
             };
         } else {
-            throw new Error(`Tổ chức ${tokeorg} không có quyền truy cập vào thông tin này`);
+            return { 
+                success: false, 
+                message: `Tổ chức ${tokeorg} không có quyền truy cập vào thông tin này` 
+            };
         }
     
-        return result;
+        return { 
+            success: true, 
+            message: 'Truy cập bản ghi thành công.', 
+            data: result 
+        }; // Trả về thông tin bản ghi y tế
     }
     
 

@@ -360,7 +360,9 @@ exports.getDataRecord = async (req, res) => {
 
 }
 exports.approveAccessRequest = async (req, res) => {
-  const { cccd, tokeorg, approve, viewType,value } = req.body;
+  const { cccd, tokeorg, approve, viewType, value } = req.body;
+  console.log(req.body);
+  const currentTime = new Date();
 
   // Kiểm tra các tham số
   if (!cccd || !tokeorg || (approve !== true && approve !== false) || !viewType) {
@@ -372,18 +374,52 @@ exports.approveAccessRequest = async (req, res) => {
       const { contract, gateway } = await connectToNetworkmedicalvalue(value);
 
       // Gọi hàm approveAccessRequest trong chaincode
-      const result = await contract.submitTransaction('approveAccessRequest', cccd, tokeorg, approve, viewType);
-      console.log(result)
+      const result = await contract.submitTransaction('approveAccessRequest', cccd, tokeorg, approve, viewType,currentTime);
+      console.log(result);
+
       // Đóng gateway
       await gateway.disconnect();
 
       return res.status(200).send(result.toString());
   } catch (error) {
-    
       console.error(`Lỗi khi phê duyệt yêu cầu: ${error}`);
       return res.status(500).send(`Lỗi khi phê duyệt yêu cầu: ${error.message}`);
   }
 };
+exports.postDataMedicalExaminationHistory = async (req, res) => {
+  try {
+      const { cccd, newData, timepost ,tokeorg} = req.body; // Get data from request body
+
+      // Check if all required data is provided
+      if (!cccd || !newData || !timepost) {
+          return res.status(400).json({ error: 'CCCD, newData, and timepost are required' });
+      }
+
+      const { contract, gateway } = await connectToNetwork(); // Connect to the network
+
+      // Call the chaincode function to update the medical record
+      const result = await contract.submitTransaction('PostDataMedicalExaminationHistory', cccd,tokeorg, JSON.stringify(newData), timepost);
+      
+      if (result) {
+          console.log("Transaction result:", result.toString());
+          res.status(200).json({
+              message: `Record with CCCD ${cccd} has been successfully updated`,
+              transactionResult: result.toString()
+          });
+      } else {
+          console.error("Result is undefined");
+          res.status(500).send("Unexpected result from transaction");
+      }
+
+      await gateway.disconnect(); // Disconnect the gateway
+
+  } catch (error) {
+      // Handle connection errors or unexpected errors
+      console.error('Error in postDataMedicalExaminationHistory handler:', error);
+      res.status(500).json({ error: 'An unexpected error occurred' });
+  }
+};
+
 
 exports.createrecord = async (req, res) => { 
     const {name, birthDate, gender, address, phoneNumber, identityCard,cccd,passwordmedical} = req.body;

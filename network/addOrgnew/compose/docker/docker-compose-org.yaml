@@ -11,8 +11,8 @@ networks:
 
 services:
 
-  peer0.ewrwerwerwerwer34e.example.com:
-    container_name: peer0.ewrwerwerwerwer34e.example.com
+  peer0.thuyen20004fdffdf.example.com:
+    container_name: peer0.thuyen20004fdffdf.example.com
     image: hyperledger/fabric-peer:2.5
 
     labels:

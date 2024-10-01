@@ -10,18 +10,18 @@ networks:
     name: fabric_test
 
 services:
-  ca_ewrwerwerwerwer34e:
+  ca_thuyen20004fdffdf:
     image: hyperledger/fabric-ca:latest
     labels:
       service: hyperledger-fabric
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-ewrwerwerwerwer34e
+      - FABRIC_CA_SERVER_CA_NAME=ca-thuyen20004fdffdf
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_PORT=11609
+      - FABRIC_CA_SERVER_PORT=11625
     ports:
-      - "11609:11609"
+      - "11625:11625"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ../fabric-ca/ewrwerwerwerwer34e:/etc/hyperledger/fabric-ca-server
-    container_name: ca_ewrwerwerwerwer34e
+      - ../fabric-ca/thuyen20004fdffdf:/etc/hyperledger/fabric-ca-server
+    container_name: ca_thuyen20004fdffdf

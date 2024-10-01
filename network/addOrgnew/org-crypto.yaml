@@ -8,10 +8,10 @@
 # ---------------------------------------------------------------------------
 PeerOrgs:
   # ---------------------------------------------------------------------------
-  # ewrwerwerwerwer34e
+  # thuyen20004fdffdf
   # ---------------------------------------------------------------------------
-  - Name: ewrwerwerwerwer34e
-    Domain: ewrwerwerwerwer34e.example.com
+  - Name: thuyen20004fdffdf
+    Domain: thuyen20004fdffdf.example.com
     EnableNodeOUs: true
     Template:
       Count: 1

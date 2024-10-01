@@ -24,3 +24,4 @@ peer lifecycle chaincode approveformyorg \
   --package-id $CC_PACKAGE_ID_ORG \
   --sequence 1
 peer lifecycle chaincode querycommitted --channelID channel1 --name organization
+ 

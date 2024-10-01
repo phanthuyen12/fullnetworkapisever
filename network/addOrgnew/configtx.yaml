@@ -13,26 +13,26 @@
 #
 ################################################################################
 Organizations:
-    - &ewrwerwerwerwer34e
+    - &thuyen20004fdffdf
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: ewrwerwerwerwer34eMSP
+        Name: thuyen20004fdffdfMSP
 
         # ID to load the MSP definition as
-        ID: ewrwerwerwerwer34eMSP
+        ID: thuyen20004fdffdfMSP
 
-        MSPDir: ../organizations/peerOrganizations/ewrwerwerwerwer34e.example.com/msp
+        MSPDir: ../organizations/peerOrganizations/thuyen20004fdffdf.example.com/msp
 
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('ewrwerwerwerwer34eMSP.admin', 'ewrwerwerwerwer34eMSP.peer', 'ewrwerwerwerwer34eMSP.client')"
+                Rule: "OR('thuyen20004fdffdfMSP.admin', 'thuyen20004fdffdfMSP.peer', 'thuyen20004fdffdfMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('ewrwerwerwerwer34eMSP.admin', 'ewrwerwerwerwer34eMSP.client')"
+                Rule: "OR('thuyen20004fdffdfMSP.admin', 'thuyen20004fdffdfMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('ewrwerwerwerwer34eMSP.admin')"
+                Rule: "OR('thuyen20004fdffdfMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('ewrwerwerwerwer34eMSP.peer')"
+                Rule: "OR('thuyen20004fdffdfMSP.peer')"

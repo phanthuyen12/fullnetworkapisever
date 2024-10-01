@@ -204,7 +204,7 @@ peer lifecycle chaincode queryinstalled
 # Approve chaincode for my org
 # CC_PACKAGE_ID_MEDICAL=$(peer lifecycle chaincode queryinstalled | grep -oP '(?<=Package ID: ).*' | head -n 1 | cut -d ',' -f 1)
 # echo "Package ID: $CC_PACKAGE_ID_MEDICAL"
-export CC_PACKAGE_ID_MEDICAL=medical_1.0.1:a36c5344e8780c62b92ee126a4d373c77bfed790e663010f2834cafbf2032669
+export CC_PACKAGE_ID_MEDICAL=medical_1.0.1:91cdd766253d7f7b93c0258b264078e7cfa650f199c8f25f131dbf6a7df63b27
 peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --channelID channel1 --name medical --version 1.0.1 --package-id $CC_PACKAGE_ID_MEDICAL --sequence 1
 
 export CC_PACKAGE_ID_ORG=organization_1.0.1:abc5c6a6cd84e8f4d2b410dc3ad7f4bbc2227ba1b3883512187d51654d3cbf47

@@ -577,7 +577,7 @@ chaincode:
 
     node:
         # This is an image based on node:$(NODE_VER)-alpine
-        runtime: $(DOCKER_NS)/fabric-nodeenv:$(TWO_DIGIT_VERSION)
+        runtime: hyperledger/fabric-nodeenv:2.5
 
     # List of directories to treat as external builders and launchers for
     # chaincode. The external builder detection processing will iterate over the

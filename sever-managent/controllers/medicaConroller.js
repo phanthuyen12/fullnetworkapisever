@@ -133,62 +133,47 @@ exports.getfullRecords= async (req,res) =>{
   }
 }
 exports.loginmedical = async (req, res) => {
-  console.log(req.body); // Log dữ liệu request
-
-  let gateway; // Khai báo biến gateway để sử dụng cho việc ngắt kết nối sau này
+  let gateway;
   try {
-    // Kết nối đến mạng Hyperledger Fabric
     const { contract, gw } = await connectToNetwork();
-    gateway = gw; // Lưu lại biến gateway để ngắt kết nối sau
-    const { cccd, passwordmedical } = req.body; // Lấy cccd và mật khẩu từ request body
+    gateway = gw;
+    const { cccd, passwordmedical } = req.body;
 
-    // Gọi chaincode 'loginMedical'
     const result = await contract.submitTransaction('loginMedical', cccd, passwordmedical);
+    // if (!result) return res.status(500).json({ error: "Unexpected result from transaction" });
 
-    if (result) {
-      console.log("Transaction result:", result.toString());
-      const parsedResult = JSON.parse(result.toString());
+    const parsedResult = JSON.parse(result.toString());
 
-      // So sánh mật khẩu nhập vào và mật khẩu lưu trong hệ thống
-      const passwordMatch = await bcrypt.compare(passwordmedical, parsedResult['existingRecord']['Record']['passwordmedical']);
-        const payload = {
-            tokenmedical:parsedResult['existingRecord']['Record']['tokenmedical'],
-            name: parsedResult['existingRecord']['Record']['name'],
-            email: parsedResult['existingRecord']['Record']['email'],
-            cccd: parsedResult['existingRecord']['Record']['cccd']
-        };
+    // // Check if the structure exists
+  
+    // console.log(parsedResult.existingRecord.passwordmedical)
+    const passwordMatch = await bcrypt.compare(passwordmedical,parsedResult.existingRecord.passwordmedical);
+    if (!passwordMatch) return res.status(401).json({ message: "Incorrect password. Please try again." });
+    
+    const payload = {
+      tokenmedical: parsedResult.existingRecord.tokenmedical,
+      name: parsedResult.existingRecord.name,
+      email: parsedResult.existingRecord.email,
+      cccd: parsedResult.existingRecord.cccd
+    };
 
-        const secretKey = 'ee2de3938caccb365423140f03873e7b3f2032696632c594131835fe88db55f76f5580f678835c22b578de32cc7ec35d9f0a42a65dec98a839625b5611296e70'; // Thay thế với khóa bí mật của bạn
-        const token = jwt.sign(payload, secretKey, { expiresIn: '1h' }); // Token hết hạn sau 1 giờ
-      if (passwordMatch) {
-        // Nếu mật khẩu đúng, trả về thông báo thành công và kết quả giao dịch
-        res.status(200).json({
-          message: "Login has been processed successfully",
-          transactionResult: token
-        });
-      } else {
-        // Nếu mật khẩu sai, trả về lỗi
-        res.status(401).json({
-          message: "Incorrect password. Please try again."
-        });
-      }
-    } else {
-      console.error("Login result is undefined");
-      res.status(500).json({ error: "Unexpected result from transaction" });
-    }
+    const secretKey = 'ee2de3938caccb365423140f03873e7b3f2032696632c594131835fe88db55f76f5580f678835c22b578de32cc7ec35d9f0a42a65dec98a839625b5611296e70';
+    const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+    
+    res.status(200).json({
+      message: "Login has been processed successfully",
+      transactionResult: token
+    });
 
   } catch (error) {
-    // Xử lý lỗi trong quá trình kết nối hoặc submit transaction
     console.error('Error in loginmedical handler:', error);
     res.status(500).json({ error: 'An unexpected error occurred' });
 
   } finally {
-    // Đảm bảo ngắt kết nối gateway trong khối finally
-    if (gateway) {
-      await gateway.disconnect();
-    }
+    if (gateway) await gateway.disconnect();
   }
-}
+};
+
 
 exports.hasAccess= async (req, res) => {
     try{

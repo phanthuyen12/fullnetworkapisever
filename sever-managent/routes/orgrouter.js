@@ -6,8 +6,15 @@ const hospitalbrachController = require('../controllers/hospitalbrach');
 
 const interfaceController = require('../controllers/interfaceController');
 const runOrgController = require('../../network/controller/runOrg');
+const userController = require('../controllers/userController');
 
 router.post('/creater-org', orgController.createOrg);
+router.post('/users/create', userController.createUser);
+
+router.post('/users/login', userController.loginUser);
+
+
+
 router.post('/getinfo-org', orgController.getorginformation);
 router.post('/getall-org', orgController.getAllOrganizations);
 
@@ -38,8 +45,15 @@ router.post('/login-record', meidacaController.loginmedical);
 router.post('/update-record', meidacaController.updateRecords);
 router.post('/approve-access-request', meidacaController.approveAccessRequest);
 
-router.get('/interface-options',interfaceController.index);
-router.get('/list-options',interfaceController.index);
+
+
+// Route để đăng nhập
+router.post('/login', userController.loginUser);
+// router.get('/interface-options',interfaceController.index);
+// router.get('/list-options',interfaceController.index);
+
+
+
 router.get('/index', (req, res) => {
     res.json({ message: 'Xin chào các bạn!' });
 });
